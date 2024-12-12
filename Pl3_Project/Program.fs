@@ -27,3 +27,17 @@ let questions = [
     { QuestionText = "Describe the water cycle."; Options = None; CorrectAnswer = "Evaporation, condensation, precipitation"; QuestionType = Written }
 ]
 
+
+
+
+
+
+//  Store correct answers for comparison 
+let checkAnswer (question: Question) (userAnswer: string) =
+    userAnswer.Trim().ToLower() = question.CorrectAnswer.Trim().ToLower()
+
+
+
+// Implement logic for tracking user scores 
+let trackScore (questions: Question list) (userAnswers: string list) =
+    List.fold2 (fun acc q answer -> if checkAnswer q answer then acc + 1 else acc) 0 questions userAnswers
