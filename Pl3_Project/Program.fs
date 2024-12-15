@@ -47,18 +47,25 @@ let trackScore (questions: Question list) (userAnswers: string list) =
 // Create the form
 let form = new Form(Text = "Quiz Application", Size = Size(500, 400), BackColor = Color.LightBlue)
 // Header Label for "QuizzzzNow"
-let headerLabel = new Label(Location = Point(20, 10), Size = Size(450, 40), Text = "QuizzzzNow", Font = new Font("Arial", 20.0f, FontStyle.Bold), ForeColor = Color.DarkBlue)form.Controls.Add(headerLabel)
+let headerLabel = new Label(Location = Point(20, 10), Size = Size(450, 40), Text = "QuizzzzNow", Font = new Font("Arial", 20.0f, FontStyle.Bold), ForeColor = Color.DarkBlue)
+form.Controls.Add(headerLabel)
 // Question label to display the current question
-let questionLabel = new Label(Location = Point(20, 60), Size = Size(450, 40), Font = new Font("Arial", 12.0f), ForeColor = Color.DarkBlue)form.Controls.Add(questionLabel)
+let questionLabel = new Label(Location = Point(20, 60), Size = Size(450, 40), Font = new Font("Arial", 12.0f), ForeColor = Color.DarkBlue)
+form.Controls.Add(questionLabel)
 // UI components for answer options (radio buttons for multiple-choice)
-let mutable answerRadioButtons =     [ for i in 0 .. 3 do
-        new RadioButton(Location = Point(20, 100 + i * 30), Size = Size(450, 30), Font = new Font("Arial", 10.0f)) ]answerRadioButtons |> List.iter (fun rb -> form.Controls.Add(rb))
+let mutable answerRadioButtons =   
+   [ for i in 0 .. 3 do
+        new RadioButton(Location = Point(20, 100 + i * 30), Size = Size(450, 30), Font = new Font("Arial", 10.0f)) ]
+answerRadioButtons |> List.iter (fun rb -> form.Controls.Add(rb))
 // TextBox for written question answers
-let writtenAnswerTextBox = new TextBox(Location = Point(20, 100), Size = Size(450, 30))writtenAnswerTextBox.Visible <- false
+let writtenAnswerTextBox = new TextBox(Location = Point(20, 100), Size = Size(450, 30))
+writtenAnswerTextBox.Visible <- false
 form.Controls.Add(writtenAnswerTextBox)
-// Button for submitting the answerlet submitButton = new Button(Text = "Submit", Location = Point(20, 260), Size = Size(100, 40), BackColor = Color.LightGreen, Font = new Font("Arial", 10.0f))
+// Button for submitting the answer
+let submitButton = new Button(Text = "Submit", Location = Point(20, 260), Size = Size(100, 40), BackColor = Color.LightGreen, Font = new Font("Arial", 10.0f))
 form.Controls.Add(submitButton)
-// Label for displaying the resultlet resultLabel = new Label(Location = Point(20, 330), Size = Size(450, 40), Font = new Font("Arial", 12.0f), ForeColor = Color.Blue)
+// Label for displaying the result
+let resultLabel = new Label(Location = Point(20, 330), Size = Size(450, 40), Font = new Font("Arial", 12.0f), ForeColor = Color.Blue)
 form.Controls.Add(resultLabel)
 
 
@@ -106,3 +113,21 @@ let loadQuestion (index: int) =
         answerRadioButtons |> List.iter (fun rb -> rb.Visible <- false)
         writtenAnswerTextBox.Visible <- false
         submitButton.Enabled <- false
+
+
+
+
+//  Integrate all components and handle quiz flow 
+submitButton.Click.Add(fun _ ->
+    // Get the selected answer, either from the radio buttons or the text box
+    let selectedAnswer =
+        if writtenAnswerTextBox.Visible then 
+            writtenAnswerTextBox.Text  // Text for written answers
+        else
+            // Find the selected radio button and extract its text, or return empty string if none is selected
+            answerRadioButtons 
+            |> List.tryFind (fun rb -> rb.Checked) 
+            |> Option.map (fun rb -> rb.Text)  // This will give us Option<string>
+            |> Option.defaultValue ""  // If no radio button is selected, return an empty string
+    
+   
