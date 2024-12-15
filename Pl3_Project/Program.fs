@@ -130,4 +130,18 @@ submitButton.Click.Add(fun _ ->
             |> Option.map (fun rb -> rb.Text)  // This will give us Option<string>
             |> Option.defaultValue ""  // If no radio button is selected, return an empty string
     
-   
+    if selectedAnswer <> "" then
+        // Add the selected answer to the user answers and move to the next question
+        userAnswers <- userAnswers @ [selectedAnswer]
+        currentQuestionIndex <- currentQuestionIndex + 1
+        loadQuestion currentQuestionIndex
+    else
+        // Show an error message if no answer was selected
+        MessageBox.Show("Please select an answer.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning) |> ignore
+)  
+
+// Load the first question when the quiz starts
+loadQuestion currentQuestionIndex
+
+// Run the application
+Application.Run(form)
