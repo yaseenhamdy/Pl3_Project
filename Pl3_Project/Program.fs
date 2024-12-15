@@ -103,3 +103,11 @@ let loadQuestion (index: int) =
             // Hide radio buttons for written questions
             answerRadioButtons |> List.iter (fun rb -> rb.Visible <- false)
             writtenAnswerTextBox.Visible <- true
+    else
+    // End of the quiz (display results)
+        questionLabel.Text <- "Quiz Finished!"
+        let score = trackScore questions userAnswers
+        resultLabel.Text <- sprintf "Your score is: %d / %d" score questions.Length
+        answerRadioButtons |> List.iter (fun rb -> rb.Visible <- false)
+        writtenAnswerTextBox.Visible <- false
+        submitButton.Enabled <- false
