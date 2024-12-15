@@ -65,3 +65,41 @@ form.Controls.Add(submitButton)
 
 // Label for displaying the resultlet resultLabel = new Label(Location = Point(20, 280), Size = Size(450, 40), Font = new Font("Arial", 12.0f), ForeColor = Color.Blue)
 form.Controls.Add(resultLabel)
+
+
+
+
+
+// Functionality for user input (answer selection)
+let mutable currentQuestionIndex = 0
+let mutable userAnswers = []
+
+// Helper function to create the necessary number of radio buttons based on the options
+let createRadioButtons (numOptions: int) =
+    [ for i in 0 .. numOptions - 1 do
+        new RadioButton(Location = Point(20, 100 + i * 30), Size = Size(450, 30), Font = new Font("Arial", 10.0f)) ]
+
+// Load the next question based on the question type
+let loadQuestion (index: int) =
+    if index < questions.Length then
+        let question = questions.[index]
+        questionLabel.Text <- question.QuestionText
+        
+        // If it's a multiple-choice question, show the radio buttons
+        match question.QuestionType with
+        | MultipleChoice ->
+            // Clear previous radio buttons to avoid duplication
+            answerRadioButtons |> List.iter (fun rb -> form.Controls.Remove(rb))
+            
+            // Create new radio buttons for this question based on the number of options
+            answerRadioButtons <- createRadioButtons (question.Options.Value.Length)
+            answerRadioButtons |> List.iteri (fun i rb -> 
+                rb.Text <- question.Options.Value.[i]
+                rb.Checked <- false
+                rb.Visible <- true
+                form.Controls.Add(rb)) // Add each radio button individually
+            writtenAnswerTextBox.Visible <- false
+        | Written ->
+            // Hide radio buttons for written questions
+            answerRadioButtons |> List.iter (fun rb -> rb.Visible <- false)
+            writtenAnswerTextBox.Visible <- true
