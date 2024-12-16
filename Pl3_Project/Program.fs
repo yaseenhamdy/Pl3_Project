@@ -32,6 +32,9 @@ let questions = [
 
 
 
+
+
+
 //  Store correct answers for comparison 
 let checkAnswer (question: Question) (userAnswer: string) =
     userAnswer.Trim().ToLower() = question.CorrectAnswer.Trim().ToLower()
