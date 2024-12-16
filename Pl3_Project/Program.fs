@@ -20,12 +20,16 @@ type Question = {
 
 // Sample quiz data (Create multiple-choice and written questions)
 let questions = [
+    { QuestionText = "What is the square root of 64?"; Options = Some [| "6"; "8"; "7"; "9" |]; CorrectAnswer = "8"; QuestionType = MultipleChoice }
+    { QuestionText = "Which programming language is known as functional-first?"; Options = Some [| "Python"; "F#"; "Java"; "C++" |]; CorrectAnswer = "F#"; QuestionType = MultipleChoice }
     { QuestionText = "What is the capital of France?"; Options = Some [| "Paris"; "London"; "Berlin"; "Rome" |]; CorrectAnswer = "Paris"; QuestionType = MultipleChoice }
+    { QuestionText = "What does the term 'CPU' stand for?"; Options = Some [| "Central Processing Unit"; "Central Programming Unit"; "Computer Power Unit"; "Control Processing Unit" |]; CorrectAnswer = "Central Processing Unit"; QuestionType = MultipleChoice }
     { QuestionText = "Which is the largest planet?"; Options = Some [| "Earth"; "Mars"; "Jupiter"; "Venus" |]; CorrectAnswer = "Jupiter"; QuestionType = MultipleChoice }
     { QuestionText = "Who is best player in the world ?"; Options = Some [| "Messi 2022"; "Messi 2019"; "Messi 2009"; "All of the above" |]; CorrectAnswer = "All of the above"; QuestionType = MultipleChoice }
     { QuestionText = "What is 5 + 3?"; Options = None; CorrectAnswer = "8"; QuestionType = Written }
     { QuestionText = "Describe the water cycle."; Options = None; CorrectAnswer = "Evaporation, condensation, precipitation"; QuestionType = Written }
 ]
+
 
 
 
@@ -71,6 +75,11 @@ form.Controls.Add(submitButton)
 let resultLabel = new Label(Location = Point(20, 330), Size = Size(450, 40), Font = new Font("Arial", 12.0f), ForeColor = Color.Blue)
 form.Controls.Add(resultLabel)
 
+let restartButton = new Button(Text = "Restart Quiz", Location = Point(130, 260), Size = Size(100, 40), BackColor = Color.LightCoral, Font = new Font("Arial", 10.0f))
+restartButton.Visible <- false // Hide it initially
+form.Controls.Add(restartButton)
+
+
 
 
 
@@ -110,6 +119,18 @@ let loadQuestion (index: int) =
         answerRadioButtons |> List.iter (fun rb -> rb.Visible <- false)
         writtenAnswerTextBox.Visible <- false
         submitButton.Enabled <- false
+        restartButton.Visible <- true
+
+
+restartButton.Click.Add(fun _ ->
+    // Reset quiz state
+    currentQuestionIndex <- 0
+    userAnswers <- []
+    resultLabel.Text <- ""
+    submitButton.Enabled <- true
+    restartButton.Visible <- false
+    loadQuestion currentQuestionIndex
+    )
 
 
 //  Integrate all components and handle quiz flow 
