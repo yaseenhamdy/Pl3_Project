@@ -116,8 +116,6 @@ let loadQuestion (index: int) =
         submitButton.Enabled <- false
 
 
-
-
 //  Integrate all components and handle quiz flow 
 submitButton.Click.Add(fun _ ->
     // Get the selected answer, either from the radio buttons or the text box
@@ -132,14 +130,21 @@ submitButton.Click.Add(fun _ ->
             |> Option.defaultValue ""  // If no radio button is selected, return an empty string
     
     if selectedAnswer <> "" then
-        // Add the selected answer to the user answers and move to the next question
+        // Add the selected answer to the user answers
         userAnswers <- userAnswers @ [selectedAnswer]
+        
+        // Clear the text box if it's a written question
+        if writtenAnswerTextBox.Visible then
+            writtenAnswerTextBox.Clear()
+
+        // Move to the next question
         currentQuestionIndex <- currentQuestionIndex + 1
         loadQuestion currentQuestionIndex
     else
         // Show an error message if no answer was selected
         MessageBox.Show("Please select an answer.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning) |> ignore
-)  
+)
+
 
 // Load the first question when the quiz starts
 loadQuestion currentQuestionIndex
