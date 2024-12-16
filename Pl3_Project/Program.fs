@@ -23,6 +23,7 @@ type Question = {
 let questions = [
     { QuestionText = "What is the capital of France?"; Options = Some [| "Paris"; "London"; "Berlin"; "Rome" |]; CorrectAnswer = "Paris"; QuestionType = MultipleChoice }
     { QuestionText = "Which is the largest planet?"; Options = Some [| "Earth"; "Mars"; "Jupiter"; "Venus" |]; CorrectAnswer = "Jupiter"; QuestionType = MultipleChoice }
+    { QuestionText = "Who is best player in the world ?"; Options = Some [| "Messi 2022"; "Messi 2019"; "Messi 2009"; "All of the above" |]; CorrectAnswer = "All of the above"; QuestionType = MultipleChoice }
     { QuestionText = "What is 5 + 3?"; Options = None; CorrectAnswer = "8"; QuestionType = Written }
     { QuestionText = "Describe the water cycle."; Options = None; CorrectAnswer = "Evaporation, condensation, precipitation"; QuestionType = Written }
 ]
